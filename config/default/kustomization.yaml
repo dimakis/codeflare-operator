@@ -9,8 +9,9 @@ namespace: openshift-operators
 namePrefix: codeflare-operator-
 
 # Labels to add to all resources and selectors.
-# commonLabels:
-#  someName: someValue
+commonLabels:
+  app.kubernetes.io/name: codeflare-operator
+  app.kubernetes.io/part-of: codeflare
 
 bases:
 - ../crd
@@ -24,11 +25,9 @@ bases:
 # [PROMETHEUS] To enable prometheus monitor, uncomment all sections with 'PROMETHEUS'.
 # - ../prometheus
 
-patchesStrategicMerge:
-# Protect the /metrics endpoint by putting it behind auth.
-# If you want your controller-manager to expose the /metrics
-# endpoint w/o any authn/z, please comment the following line.
-- manager_auth_proxy_patch.yaml
+resources:
+# Add metrics service
+- metrics_service.yaml
 
 # Mount the controller config file for loading manager configurations
 # through a ComponentConfig type

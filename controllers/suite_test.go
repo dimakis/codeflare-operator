@@ -22,18 +22,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/project-codeflare/codeflare-operator/controllers/util"
+	mf "github.com/manifestival/manifestival"
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
 	"go.uber.org/zap/zapcore"
+
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	"k8s.io/apimachinery/pkg/types"
-
-	. "github.com/onsi/ginkgo/v2"
-	. "github.com/onsi/gomega"
-
-	mf "github.com/manifestival/manifestival"
-	codeflarev1alpha1 "github.com/project-codeflare/codeflare-operator/api/v1alpha1"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/client-go/kubernetes/scheme"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
@@ -43,7 +40,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/envtest"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
-	//+kubebuilder:scaffold:imports
+
+	"github.com/project-codeflare/codeflare-operator/api/codeflare/v1alpha1"
+	"github.com/project-codeflare/codeflare-operator/controllers/util"
+	// +kubebuilder:scaffold:imports
 )
 
 // These tests use Ginkgo (BDD-style Go testing framework). Refer to
@@ -93,8 +93,8 @@ var _ = BeforeSuite(func() {
 
 	// Register API objects
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme.Scheme))
-	utilruntime.Must(codeflarev1alpha1.AddToScheme(scheme.Scheme))
-	//+kubebuilder:scaffold:scheme
+	utilruntime.Must(v1alpha1.AddToScheme(scheme.Scheme))
+	// +kubebuilder:scaffold:scheme
 
 	// Initialize Kubernetes client
 	k8sClient, err = client.New(cfg, client.Options{Scheme: scheme.Scheme})
@@ -147,8 +147,8 @@ var _ = AfterSuite(func() {
 // Cleanup resources to not contaminate between tests
 var _ = AfterEach(func() {
 	inNamespace := client.InNamespace(workingNamespace)
-	Expect(k8sClient.DeleteAllOf(context.TODO(), &codeflarev1alpha1.MCAD{}, inNamespace)).ToNot(HaveOccurred())
-	Expect(k8sClient.DeleteAllOf(context.TODO(), &codeflarev1alpha1.InstaScale{}, inNamespace)).ToNot(HaveOccurred())
+	Expect(k8sClient.DeleteAllOf(context.TODO(), &v1alpha1.MCAD{}, inNamespace)).ToNot(HaveOccurred())
+	Expect(k8sClient.DeleteAllOf(context.TODO(), &v1alpha1.InstaScale{}, inNamespace)).ToNot(HaveOccurred())
 
 })
 
@@ -181,7 +181,7 @@ func compareConfigMaps(path string, opts mf.Option) {
 	Expect(util.ConfigMapsAreEqual(*expectedConfigMap, *actualConfigMap)).Should(BeTrue())
 }
 
-//func compareRoleBindings(path string, opts mf.Option) {
+// func compareRoleBindings(path string, opts mf.Option) {
 //	expectedRB := &k8srbacv1.RoleBinding{}
 //	Expect(convertToStructuredResource(path, expectedRB, opts)).NotTo(HaveOccurred())
 //	expectedRB.Subjects[0].Namespace = workingNamespace
@@ -193,7 +193,7 @@ func compareConfigMaps(path string, opts mf.Option) {
 //	}, timeout, interval).ShouldNot(HaveOccurred())
 //
 //	Expect(util.RoleBindingsAreEqual(*expectedRB, *actualRB)).Should(BeTrue())
-//}
+// }
 
 func compareServiceAccounts(path string, opts mf.Option) {
 	expectedSA := &corev1.ServiceAccount{}
