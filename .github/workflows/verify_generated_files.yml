@@ -1,0 +1,38 @@
+name: Verify Generated Files and Import Organization
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - '**.go'
+      - '**go.mod'
+      - '**go.sum'
+    tags-ignore:
+      - 'v*'
+  pull_request:
+    paths:
+      - '**.go'
+      - '**go.mod'
+      - '**go.sum'
+jobs:
+  verify-imports:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: v1.19
+    - name: Verify that imports are organized
+      run: make verify-imports
+
+  verify-manifests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: v1.19
+    - name: Verify that the latest WebhookConfigurations, ClusterRoles, and CustomResourceDefinitions have been generated
+      run: make manifests && git diff --exit-code

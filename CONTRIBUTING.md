@@ -5,7 +5,7 @@ Here are a few things to go over before getting started with CodeFlare Operator 
 ## Environment setup
 
 The following should be installed in your working environment:
- - Go 1.18.X
+ - Go 1.19.x
    - [Download release](https://go.dev/dl/)
    - [Install Instructions](https://go.dev/doc/install)
  - [Operator SDK](https://sdk.operatorframework.io/docs/installation/)
@@ -18,7 +18,7 @@ The MCAD and InstaScale custom resources are defined under the `api` dir:
  - See `mcad_types.go` and `instascale_types.go`
 
 The MCAD and InstaScale resource templates can be found under `config/internal`:
- - Sorted under `mcad` and `insascale` subdirs
+ - Sorted under `mcad` and `instascale` subdirs
 
 The code for MCAD/InstaScale resource reconcilliation can be found in the `controllers` dir:
  - See `mcad_controller.go` and `instascale_controller.go`
@@ -31,13 +31,20 @@ If changes are made to any Go code (like in the `controllers` dir for example), 
  - This will check and build/compile the modified code
 
 For building and pushing a new version of the operator image:
- - `make image-build -e IMG=<image-repo/image-name>`
- - `make image-push -e IMG<image-repo/image-name>`
+ - `make image-build -e IMAGE_TAG_BASE=<image-repo/image-name> VERSION=<semver>`
+ - `make image-push -e IMAGE_TAG_BASE=<image-repo/image-name> VERSION=<semver>`
 
 For deploying onto a cluster:
  - First, either set `KUBECONFIG` or ensure you are logged into a cluster in your environment
  - `make install`
  - `make deploy -e IMG=<image-repo/image-name>`
+
+For building and pushing a new version of the bundled operator image:
+ - `make bundle-build -e IMAGE_TAG_BASE=<image-repo/image-name> VERSION=<new semver> PREVIOUS_VERSION=<semver to replace>`
+ - `make bundle-push -e IMAGE_TAG_BASE=<image-repo/image-name> VERSION=<new semver> PREVIOUS_VERSION=<semver to replace>`
+
+To create a new openshift-community-operator-release:
+ - `make openshift-community-operator-release -e IMAGE_TAG_BASE=<image-repo/image-name> VERSION=<new semver> PREVIOUS_VERSION=<semver to replace> GH_TOKEN=<GitHub token for pushing bundle content to forked repository>`
 
 ## Testing
 The CodeFlare Operator currently has unit tests and pre-commit checks

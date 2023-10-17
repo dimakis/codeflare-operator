@@ -1,16 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+- name: codeflare-stack-config
+  envs:
+    - params.env
+configurations:
+  - params.yaml
+
+vars:
+- name: namespace
+  objref:
+    kind: ConfigMap
+    name: codeflare-stack-config
+    apiVersion: v1
+  fieldref:
+    fieldpath: data.namespace
 # These resources constitute the fully configured set of manifests
 # used to generate the 'manifests/' directory in a bundle.
 resources:
-- bases/codeflare-operator.clusterserviceversion.yaml
 - ../default
-- ../samples
 - ../scorecard
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-patches:
-- patch: '[{"op":"add", "path":"/metadata/annotations/containerImage", "value": "quay.io/project-codeflare/codeflare-operator:v0.0.1" }]'
-  target:
-    kind: ClusterServiceVersion
-- patch: '[{"op":"add", "path":"/metadata/annotations/containerImage", "value": "quay.io/project-codeflare/codeflare-operator:v0.0.2" }]'
-  target:
-    kind: ClusterServiceVersion
+- ../rbac
+- codeflare-notebook-imagestream.yaml

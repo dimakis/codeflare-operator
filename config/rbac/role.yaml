@@ -19,13 +19,12 @@ rules:
   - update
   - watch
 - apiGroups:
-  - apps
+  - batch
   resources:
-  - deployments
+  - jobs
   verbs:
   - create
   - delete
-  - get
   - list
   - patch
   - update
@@ -45,57 +44,24 @@ rules:
   - update
   - watch
 - apiGroups:
-  - codeflare.codeflare.dev
+  - authentication.k8s.io
   resources:
-  - instascales
+  - tokenreviews
   verbs:
   - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
 - apiGroups:
-  - codeflare.codeflare.dev
+  - authorization.k8s.io
   resources:
-  - instascales/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - codeflare.codeflare.dev
-  resources:
-  - instascales/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - codeflare.codeflare.dev
-  resources:
-  - mcads
+  - subjectaccessreviews
   verbs:
   - create
-  - delete
+- apiGroups:
+  - config.openshift.io
+  resources:
+  - clusterversions
+  verbs:
   - get
   - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - codeflare.codeflare.dev
-  resources:
-  - mcads/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - codeflare.codeflare.dev
-  resources:
-  - mcads/status
-  verbs:
-  - get
-  - patch
-  - update
 - apiGroups:
   - coordination.k8s.io
   resources:
@@ -117,23 +83,6 @@ rules:
   resources:
   - configmaps
   - nodes
-  - persistentvolumeclaims
-  - persistentvolumes
-  - secrets
-  - serviceaccounts
-  - services
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
   - persistentvolumeclaims
   - persistentvolumes
   - secrets
@@ -174,8 +123,6 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - lists
-  - namespaces
   - pods
   verbs:
   - create
@@ -186,13 +133,6 @@ rules:
   - patch
   - update
   - watch
-- apiGroups:
-  - ""
-  resources:
-  - persistentvolumeclaims
-  - persistentvolumes
-  verbs:
-  - '*'
 - apiGroups:
   - ""
   resources:
@@ -209,12 +149,6 @@ rules:
   - list
   - watch
 - apiGroups:
-  - custom.metrics.k8s.io
-  resources:
-  - '*'
-  verbs:
-  - '*'
-- apiGroups:
   - events.k8s.io
   resources:
   - events
@@ -224,81 +158,9 @@ rules:
   - patch
   - update
 - apiGroups:
-  - extensions
-  resources:
-  - replicasets
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
   - machine.openshift.io
   resources:
   - '*'
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - mcad.ibm.com
-  resources:
-  - appwrappers
-  - appwrappers/finalizers
-  - appwrappers/status
-  - queuejobs
-  - schedulingspecs
-  verbs:
-  - create
-  - delete
-  - deletecollection
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - mcad.ibm.com
-  resources:
-  - appwrappers
-  - queuejobs
-  - schedulingspecs
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - policy
-  resources:
-  - poddisruptionbudgets
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - rbac.authorization.k8s.io
-  resources:
-  - clusterrolebindings
-  - clusterroles
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - rbac.authorization.k8s.io
-  resources:
-  - rolebindings
-  - roles
   verbs:
   - create
   - delete
@@ -329,4 +191,33 @@ rules:
   verbs:
   - get
   - list
+  - watch
+- apiGroups:
+  - workload.codeflare.dev
+  resources:
+  - appwrappers
+  - appwrappers/finalizers
+  - appwrappers/status
+  - schedulingspecs
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - quota.codeflare.dev
+  resources:
+  - quotasubtrees
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - get
+  - list
+  - patch
+  - update
   - watch

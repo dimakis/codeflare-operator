@@ -1,0 +1,15 @@
+name: Dispatch release event for OpenDataHub CFO fork sync
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  notify-fork:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch to Fork
+        env:
+            GITHUB_TOKEN: ${{ secrets.CODEFLARE_MACHINE_ACCOUNT_TOKEN }}
+        run: |
+            gh workflow run test.yaml -R github.com/bobbins228/codeflare-operator -r test/workflow
