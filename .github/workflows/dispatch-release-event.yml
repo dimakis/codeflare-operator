@@ -12,4 +12,4 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.CODEFLARE_MACHINE_ACCOUNT_TOKEN }}
         run: |
-            gh workflow run test.yaml -R github.com/bobbins228/codeflare-operator -r test/workflow
+            gh workflow run test.yaml -R github.com/bobbins228/codeflare-operator -r test-workflow
