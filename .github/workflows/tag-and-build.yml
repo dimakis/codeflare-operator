@@ -95,10 +95,6 @@ jobs:
       run: |
         podman login --username ${{ secrets.QUAY_ID }} --password ${{ secrets.QUAY_TOKEN }} quay.io
 
-    - name: Align go.mod and go.sum dependencies for released components
-      run: |
-        make modules
-
     - name: Image Build and Push
       run: |
         make build
